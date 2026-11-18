@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RecycLoop - Sorting Batch Manager (Prac 13)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f9f4; color: #1b4332; padding: 30px; }
+        .container { max-width: 750px; margin: auto; background: white; padding: 25px; border-radius: 12px; border: 2px solid #52b788; }
+        .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+        input { padding: 8px 12px; border: 1px solid #95d5b2; border-radius: 6px; }
+        button { padding: 8px 14px; background: #2d6a4f; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        button:hover { background: #1b4332; }
+        ol { background: #e8f5e9; padding: 20px 40px; border-radius: 8px; }
+        li { margin: 6px 0; font-weight: 500; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>♻ RecycLoop Household Sorting Batch (CRUD)</h2>
+    <div class="controls">
+        <input type="text" id="addInput" placeholder="Add recyclable (e.g. 3kg PET)...">
+        <button onclick="addItem()">Add</button>
+
+        <input type="number" id="delInput" placeholder="Item # to delete">
+        <button onclick="deleteItem()" style="background:#c92a2a;">Delete</button>
+
+        <input type="number" id="updNum" placeholder="Item #">
+        <input type="text" id="updText" placeholder="Updated material/weight">
+        <button onclick="updateItem()">Update</button>
+
+        <input type="text" id="searchInput" placeholder="Search batch...">
+        <button onclick="searchItems()">Search</button>
+    </div>
+
+    <ol id="batchList"></ol>
+</div>
+
+<script>
+    let batch = ["5kg PET Bottles", "2kg Aluminum Cans", "1 Old Laptop (E-Waste)", "4kg Cardboard"];
+
+    function render(list = batch) {
+        const ol = document.getElementById("batchList");
+        ol.innerHTML = "";
+        list.forEach(item => {
+            const li = document.createElement("li");
+            li.textContent = item;
+            ol.appendChild(li);
+        });
+    }
+
+    function addItem() {
+        const val = document.getElementById("addInput").value.trim();
+        if (val) { batch.push(val); document.getElementById("addInput").value = ""; render(); }
+    }
+
+    function deleteItem() {
+        const idx = parseInt(document.getElementById("delInput").value) - 1;
+        if (idx >= 0 && idx < batch.length) { batch.splice(idx, 1); document.getElementById("delInput").value = ""; render(); }
+    }
+
+    function updateItem() {
+        const idx = parseInt(document.getElementById("updNum").value) - 1;
+        const val = document.getElementById("updText").value.trim();
+        if (idx >= 0 && idx < batch.length && val) { batch[idx] = val; document.getElementById("updNum").value = ""; document.getElementById("updText").value = ""; render(); }
+    }
+
+    function searchItems() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        render(batch.filter(item => item.toLowerCase().includes(q)));
+    }
+
+    render();
+</script>
+</body>
+</html>
